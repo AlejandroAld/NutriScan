@@ -1,108 +1,128 @@
-import 'dart:typed_data';
 import 'package:flutter/material.dart';
-import 'package:image_picker/image_picker.dart';
-import 'dart:io' show Platform;
 
-import 'object_detection.dart';
+import 'object_detection_scanner.dart';
+
 
 void main() {
-  runApp(const MyApp());
+  runApp(const NutriScanApp());
 }
 
-class MyApp extends StatelessWidget {
-  const MyApp({super.key});
-
+class NutriScanApp extends StatelessWidget {
+  const NutriScanApp({super.key});
 
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      title: 'NutriScan',
       theme: ThemeData(
-        useMaterial3: true,
-        colorScheme: ColorScheme.fromSeed(
-          seedColor: Colors.orange,
-        ),
+        primarySwatch: Colors.green,
       ),
-      home: const MyHome(),
+      home: const NutriScanHomePage(),
     );
   }
 }
 
-class MyHome extends StatefulWidget {
-  const MyHome({super.key});
-
-  @override
-  State<MyHome> createState() => _MyHomeState();
-}
-
-class _MyHomeState extends State<MyHome> {
-  final imagePicker = ImagePicker();
-
-  ObjectDetection? objectDetection;
-
-  Uint8List? image;
-
-  @override
-  void initState() {
-    super.initState();
-    objectDetection = ObjectDetection();
-  }
+class NutriScanHomePage extends StatelessWidget {
+  const NutriScanHomePage({super.key});
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Image.asset('assets/images/tfl_logo.png'),
-        backgroundColor: Colors.black.withOpacity(0.5),
-      ),
-      body: SafeArea(
+      body: Container(
+        decoration: BoxDecoration(
+          gradient: LinearGradient(
+            begin: Alignment.topLeft,
+            end: Alignment.bottomRight,
+            colors: [
+              Colors.green[700]!,
+              Colors.green[700]!,
+            ],
+          ),
+        ),
         child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
-            Expanded(
-              child: Center(
-                child: (image != null) ? Image.memory(image!) : Container(),
-              ),
+            // Imagen central
+            Image.asset('assets/images/logo.jpg'),
+            Image.asset('assets/images/LogoLetter2.PNG', height: 100),
+            // Nombre NutriScan
+            // const Text(
+            //   'NutriScan',
+            //   style: TextStyle(
+            //     fontSize: 64,
+            //     fontWeight: FontWeight.bold,
+            //     color: Colors.white,
+            //   ),
+            // ),
+            // Botón con GIF
+            IconButton(
+              icon: Image.asset('assets/images/info.png'),
+              iconSize: 100,
+              onPressed: () => _showInfoDialog(context),
+              padding: const EdgeInsets.all(20.0),
             ),
-            SizedBox(
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                children: [
-                  if (Platform.isAndroid || Platform.isIOS)
-                    IconButton(
-                      onPressed: () async {
-                        final result = await imagePicker.pickImage(
-                          source: ImageSource.camera,
-                        );
-                        if (result != null) {
-                          image = objectDetection!.analyseImage(result.path);
-                          setState(() {});
-                        }
-                      },
-                      icon: const Icon(
-                        Icons.camera,
-                        size: 64,
-                      ),
-                    ),
-                  IconButton(
-                    onPressed: () async {
-                      final result = await imagePicker.pickImage(
-                        source: ImageSource.gallery,
-                      );
-                      if (result != null) {
-                        image = objectDetection!.analyseImage(result.path);
-                        setState(() {});
-                      }
-                    },
-                    icon: const Icon(
-                      Icons.photo,
-                      size: 64,
-                    ),
-                  ),
-                ],
+            // Botón Iniciar Sesión
+            ElevatedButton(
+              style: ElevatedButton.styleFrom(
+                foregroundColor: Colors.green[700], backgroundColor: Colors.white,
+                textStyle: const TextStyle(
+                  fontSize: 24,
+                  fontWeight: FontWeight.bold,
+                ),
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(32.0),
+                ),
+                padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 16),
               ),
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => const ObjectDetectionScanner()),
+                );
+              },
+              child: const Text('Iniciar Sesión'),
             ),
+            // Texto al final
           ],
         ),
       ),
     );
   }
+  // Función para mostrar el dialog
+  void _showInfoDialog(BuildContext context) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          backgroundColor: Colors.green[700],
+          content: const Text(
+            'Esta app encuentra y te dice qué frutas se encuentran en la imagen que le ingreses, inicia sesión y elige una imagen desde la galería o toma una foto para probar su funcionamiento.\n\nDesarrollado por Jose Alejandro Aldama Ramos',
+            textAlign: TextAlign.center,
+            style: TextStyle(color: Colors.white),
+          ),
+          actions: <Widget>[
+            TextButton(
+              style: ElevatedButton.styleFrom(
+                alignment: Alignment.center,
+                foregroundColor: Colors.green[700], backgroundColor: Colors.white,
+                textStyle: const TextStyle(
+                  fontSize: 24,
+                  fontWeight: FontWeight.bold,
+                ),
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(32.0),
+                ),
+                padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 16),
+              ),
+              child: const Text('Cerrar'),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
+          ],
+        );
+      },
+    );
+  }
 }
+

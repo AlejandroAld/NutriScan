@@ -4,6 +4,13 @@ import 'package:flutter/services.dart';
 import 'package:image/image.dart' as img;
 import 'package:tflite_flutter/tflite_flutter.dart';
 
+class ObjectDetectionResult {
+  final Uint8List imageBytes;
+  final String label;
+
+  ObjectDetectionResult(this.imageBytes, this.label);
+}
+
 class ObjectDetection {
   static const String _modelPath = 'assets/models/ssd_mobilenet.tflite';
   static const String _labelPath = 'assets/models/labelmap.txt';
@@ -42,7 +49,7 @@ class ObjectDetection {
     _labels = labelsRaw.split('\n');
   }
 
-  Uint8List analyseImage(String imagePath) {
+  ObjectDetectionResult analyseImage(String imagePath) {
     log('Analysing image...');
     // Reading image bytes from file
     final imageData = File(imagePath).readAsBytesSync();
@@ -99,6 +106,16 @@ class ObjectDetection {
       classication.add(_labels![classes[i]]);
     }
 
+    String topLabel = '';
+    double topScore = 0.0;
+
+    for (var i = 0; i < numberOfDetections; i++) {
+      if (scores[i] > topScore) {
+        topScore = scores[i];
+        topLabel = _labels![classes[i]];
+      }
+    }
+
     log('Outlining objects...');
     for (var i = 0; i < numberOfDetections; i++) {
       if (scores[i] > 0.6) {
@@ -127,7 +144,7 @@ class ObjectDetection {
 
     log('Done.');
 
-    return img.encodeJpg(imageInput);
+    return ObjectDetectionResult(img.encodeJpg(imageInput), topLabel);
   }
 
   List<List<Object>> _runInference(
