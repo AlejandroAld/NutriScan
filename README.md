@@ -8,25 +8,41 @@ NutriScan es una aplicación móvil que utiliza un modelo de TensorFlow Lite par
 
 En esta pantalla se controla el inicio de sesión, aunque esta funcionalidad aún no está implementada. Se muestra información breve sobre el funcionamiento de la aplicación móvil.
 
+![pantalla1](pantalla1.jpeg)
+
+![pantalla1](pantalla2.jpeg)
+
 ### Pantalla 2: Selección de Imagen
 
 En esta pantalla, el usuario puede seleccionar una imagen de la galería de su dispositivo o tomar una foto al instante.
+
+![pantalla1](pantalla3.jpeg)
 
 ### Después de Ingresada la Imagen
 
 Una vez que se selecciona o toma la imagen, la aplicación procesa la imagen en el dispositivo y detecta la fruta presente en la imagen.
 
+![pantalla1](pantalla4.jpeg)
+
 ### Pantalla 3: Información de la Fruta
 
 En esta pantalla, se muestra información detallada sobre la fruta detectada. El usuario puede desplazarse verticalmente para acceder a más información.
+
+![pantalla1](pantalla5.jpeg)
+
+![pantalla1](pantalla6.jpeg)
 
 ### Añadir Cantidad Consumida
 
 El usuario tiene la opción de añadir la cantidad consumida de la fruta. Esta información se utiliza para calcular las calorías y macronutrientes.
 
+![pantalla1](pantalla7.jpeg)
+
 ### Pantalla 4: Base de Datos de Consumo
 
 La cantidad y tipo de fruta consumida se añade a una base de datos dentro del dispositivo móvil. Esta base de datos guarda de forma persistente todo lo que el usuario ha consumido.
+
+![pantalla1](pantalla8.jpeg)
 
 ## Requisitos
 
